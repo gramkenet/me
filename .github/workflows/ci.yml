@@ -1,0 +1,37 @@
+# Lint and build on every push and pull request. Deployment is handled by
+# Vercel's Git integration, not by this workflow.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      # Also validates résumé data (Zod) and Sanity content/queries against the
+      # production dataset, since pages are prerendered at build time.
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
