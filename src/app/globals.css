@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the theme toggle rather than the OS setting. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* Brand palette. Generates utilities like bg-primary-500, text-secondary-700,
-   border-neutral-200, bg-success-light. `neutral` replaces Tailwind's default. */
-@theme {
+   border-neutral-200, bg-success-light. `neutral` replaces Tailwind's default.
+   `static` emits every variable, even unused ones, so var(--color-*) always resolves. */
+@theme static {
   --color-primary-50: #f3f4f6;
   --color-primary-100: #e7e9ed;
   --color-primary-200: #caced8;
@@ -65,26 +69,73 @@
   --color-info-dark: #0c4c8d;
 }
 
-/* Semantic roles, mapped onto the palette. Components use these
-   (bg-background, text-muted, text-link…) so dark mode is handled here. */
+/* Semantic roles, mapped onto the palette. Light is the default; dark applies
+   when <html data-theme="dark"> (set by the header toggle, see theme-toggle.tsx).
+   Components only use these (bg-surface, text-muted, bg-action…). */
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: var(--color-primary-500);
   --muted: var(--color-neutral-600);
   --border: var(--color-neutral-200);
+  --border-strong: var(--color-neutral-300);
+  --surface: var(--color-neutral-50);
+  --surface-hover: var(--color-neutral-100);
   --link: var(--color-secondary-700);
+  --ring: var(--color-secondary-600);
   --selection: var(--color-secondary-200);
+
+  /* Primary action (buttons). */
+  --action: var(--color-primary-500);
+  --action-hover: var(--color-primary-600);
+  --action-foreground: #ffffff;
+
+  /* Brand tint for badges and highlights. */
+  --brand-soft: var(--color-secondary-100);
+  --brand-soft-foreground: var(--color-secondary-800);
+
+  /* Status tones: soft = background, strong = text/icon on soft. */
+  --success-soft: var(--color-success-light);
+  --success-strong: var(--color-success-dark);
+  --warning-soft: var(--color-warning-light);
+  --warning-strong: var(--color-warning-dark);
+  --error-soft: var(--color-error-light);
+  --error-strong: var(--color-error-dark);
+  --info-soft: var(--color-info-light);
+  --info-strong: var(--color-info-dark);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--color-neutral-950);
-    --foreground: var(--color-neutral-50);
-    --muted: var(--color-neutral-400);
-    --border: var(--color-neutral-800);
-    --link: var(--color-secondary-400);
-    --selection: var(--color-secondary-800);
-  }
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: var(--color-neutral-950);
+  --foreground: var(--color-neutral-50);
+  --muted: var(--color-neutral-400);
+  --border: var(--color-neutral-800);
+  --border-strong: var(--color-neutral-700);
+  --surface: var(--color-neutral-900);
+  --surface-hover: var(--color-neutral-800);
+  --link: var(--color-secondary-400);
+  --ring: var(--color-secondary-400);
+  --selection: var(--color-secondary-800);
+
+  --action: var(--color-secondary-400);
+  --action-hover: var(--color-secondary-300);
+  --action-foreground: var(--color-primary-600);
+
+  --brand-soft: var(--color-secondary-900);
+  --brand-soft-foreground: var(--color-secondary-200);
+
+  /* The palette's -light/-dark status shades are light-mode only;
+     derive dark equivalents from the base color. */
+  --success-soft: color-mix(in oklab, var(--color-success) 16%, var(--color-neutral-950));
+  --success-strong: color-mix(in oklab, var(--color-success) 65%, white);
+  --warning-soft: color-mix(in oklab, var(--color-warning) 16%, var(--color-neutral-950));
+  --warning-strong: color-mix(in oklab, var(--color-warning) 65%, white);
+  --error-soft: color-mix(in oklab, var(--color-error) 16%, var(--color-neutral-950));
+  --error-strong: color-mix(in oklab, var(--color-error) 55%, white);
+  --info-soft: color-mix(in oklab, var(--color-info) 16%, var(--color-neutral-950));
+  --info-strong: color-mix(in oklab, var(--color-info) 55%, white);
 }
 
 @theme inline {
@@ -92,33 +143,27 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
   --color-link: var(--link);
+  --color-ring: var(--ring);
+  --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
+  --color-action-foreground: var(--action-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-soft-foreground: var(--brand-soft-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-success-strong: var(--success-strong);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-strong: var(--warning-strong);
+  --color-error-soft: var(--error-soft);
+  --color-error-strong: var(--error-strong);
+  --color-info-soft: var(--info-soft);
+  --color-info-strong: var(--info-strong);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@utility container-page {
-  margin-inline: auto;
-  width: 100%;
-  max-width: 48rem;
-  padding-inline: 1.25rem;
-}
-
-@utility section-title {
-  margin-bottom: 1.5rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-@utility chip {
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  padding: 0.125rem 0.625rem;
-  font-size: 0.8125rem;
-  color: var(--muted);
+  --font-script: var(--font-dancing-script);
 }
 
 body {
@@ -128,6 +173,29 @@ body {
 
 ::selection {
   background: var(--selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Home hero backdrop: brand glow plus a faint grid that fades out. */
+.hero-backdrop {
+  background:
+    radial-gradient(48rem 28rem at 85% -10%, color-mix(in oklab, var(--color-secondary-500) 40%, transparent), transparent 70%),
+    radial-gradient(36rem 24rem at -5% 110%, color-mix(in oklab, var(--color-secondary-700) 35%, transparent), transparent 70%);
+}
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, white 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, white 6%, transparent) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
 
 /* Long-form content from Sanity. */
@@ -160,6 +228,15 @@ body {
   list-style: decimal;
   padding-left: 1.25rem;
 }
+.prose figure {
+  margin-block: 2em;
+}
+.prose figcaption {
+  margin-top: 0.75em;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-align: center;
+}
 .prose blockquote {
   border-left: 2px solid var(--border);
   padding-left: 1rem;
@@ -180,12 +257,10 @@ body {
 .code-block pre span {
   color: var(--shiki-light);
 }
-@media (prefers-color-scheme: dark) {
-  .code-block pre {
-    color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
-  }
-  .code-block pre span {
-    color: var(--shiki-dark);
-  }
+[data-theme="dark"] .code-block pre {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+[data-theme="dark"] .code-block pre span {
+  color: var(--shiki-dark);
 }

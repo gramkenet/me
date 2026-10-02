@@ -1,20 +1,45 @@
-import Link from "next/link";
+import { CardLink, Heading, Text } from "@/components/ui";
 import { formatDate } from "@/lib/dates";
+import type { SanityImage as SanityImageData } from "@/lib/sanity/schemas";
+import { SanityImage } from "./sanity-image";
 
-type Entry = { slug: string; title: string; excerpt: string | null; publishedAt: string };
+type Entry = {
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  publishedAt: string;
+  coverImage?: SanityImageData | null;
+};
 
 export function EntryList({ entries, basePath }: { entries: Entry[]; basePath: string }) {
   return (
-    <ul className="divide-y divide-border">
+    <ul className="space-y-3">
       {entries.map((entry) => (
-        <li key={entry.slug} className="py-5">
-          <Link href={`${basePath}/${entry.slug}`} className="group block">
-            <h3 className="font-medium group-hover:underline underline-offset-4">{entry.title}</h3>
-            {entry.excerpt && <p className="mt-1 text-muted">{entry.excerpt}</p>}
-            <time dateTime={entry.publishedAt} className="mt-2 block text-sm text-muted">
-              {formatDate(entry.publishedAt)}
-            </time>
-          </Link>
+        <li key={entry.slug}>
+          <CardLink href={`${basePath}/${entry.slug}`} className="flex flex-col gap-5 p-5 sm:flex-row">
+            <div className="min-w-0 flex-1">
+              <Heading level={3} size="sm" className="group-hover:underline underline-offset-4">
+                {entry.title}
+              </Heading>
+              {entry.excerpt && (
+                <Text tone="muted" className="mt-1">
+                  {entry.excerpt}
+                </Text>
+              )}
+              <Text size="sm" tone="muted" className="mt-3">
+                <time dateTime={entry.publishedAt}>{formatDate(entry.publishedAt)}</time>
+              </Text>
+            </div>
+            {entry.coverImage && (
+              <SanityImage
+                image={entry.coverImage}
+                width={224}
+                aspect={16 / 10}
+                sizes="(max-width: 640px) 100vw, 224px"
+                className="rounded-md sm:order-first sm:w-56 sm:shrink-0 sm:self-start"
+              />
+            )}
+          </CardLink>
         </li>
       ))}
     </ul>

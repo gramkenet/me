@@ -1,3 +1,4 @@
+import { ButtonLink, Section, Stack, Text } from "@/components/ui";
 import { EntryList } from "./entry-list";
 
 type Entry = {
@@ -24,23 +25,22 @@ export function GroupedEntries({
     .map((c) => ({ ...c, entries: entries.filter((e) => e.category === c.slug) }))
     .filter((g) => g.entries.length > 0);
 
-  if (groups.length === 0) return <p className="text-muted">{emptyMessage}</p>;
+  if (groups.length === 0) return <Text tone="muted">{emptyMessage}</Text>;
 
   return (
-    <>
+    <Stack gap="lg">
       <nav aria-label="Categories" className="flex flex-wrap gap-2">
         {groups.map((g) => (
-          <a key={g.slug} href={`#${g.slug}`} className="chip hover:border-foreground">
+          <ButtonLink key={g.slug} href={`#${g.slug}`} variant="secondary" size="sm" className="rounded-full">
             {g.label}
-          </a>
+          </ButtonLink>
         ))}
       </nav>
       {groups.map((g) => (
-        <section key={g.slug} id={g.slug} className="mt-12 scroll-mt-24">
-          <h2 className="section-title">{g.label}</h2>
+        <Section key={g.slug} id={g.slug} title={g.label}>
           <EntryList entries={g.entries} basePath={basePath} />
-        </section>
+        </Section>
       ))}
-    </>
+    </Stack>
   );
 }

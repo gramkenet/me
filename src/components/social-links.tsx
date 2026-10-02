@@ -1,6 +1,7 @@
 import { ArrowUpRight, Mail } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { site } from "@/content/site";
+import { TextLink } from "@/components/ui";
 
 type SocialLink = { label: string; value: string; href: string; Icon: LucideIcon };
 
@@ -18,12 +19,11 @@ export function socialLinks(): SocialLink[] {
 export function SocialLinks() {
   return (
     <ul className="flex gap-5">
-      {socialLinks().map(({ label, href, Icon }) => (
+      {socialLinks().map(({ label, href }) => (
         <li key={label}>
-          <a href={href} className="inline-flex items-center gap-1 hover:text-foreground">
+          <TextLink href={href} variant="subtle" arrow className="gap-1 [&_svg]:size-3.5">
             {label}
-            <Icon className="size-3.5" aria-hidden />
-          </a>
+          </TextLink>
         </li>
       ))}
     </ul>

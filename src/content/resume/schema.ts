@@ -8,7 +8,8 @@ export const experienceSchema = z
     company: z.string().min(1),
     title: z.string().min(1),
     location: z.string().optional(),
-    url: z.url().optional(),
+    /** Listed under "Other experience", e.g. side businesses. */
+    secondary: z.boolean().optional(),
     startDate: yearMonth,
     /** null = current role */
     endDate: yearMonth.nullable(),
@@ -29,11 +30,20 @@ export const skillGroupSchema = z.object({
 export const certificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
-  date: yearMonth,
+  date: yearMonth.optional(),
   expires: yearMonth.optional(),
   url: z.url().optional(),
+});
+
+export const educationSchema = z.object({
+  school: z.string().min(1),
+  degree: z.string().optional(),
+  field: z.string().optional(),
+  startYear: z.number().int().optional(),
+  endYear: z.number().int().optional(),
 });
 
 export type Experience = z.infer<typeof experienceSchema>;
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
 export type Certification = z.infer<typeof certificationSchema>;
+export type Education = z.infer<typeof educationSchema>;

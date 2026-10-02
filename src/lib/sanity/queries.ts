@@ -8,29 +8,32 @@ import {
   postSummarySchema,
 } from "./schemas";
 
-const summaryProjection = `title, "slug": slug.current, excerpt, publishedAt, category`;
+// Joins the asset's dimensions and blur placeholder into an image object.
+const imageMeta = `"dimensions": asset->metadata.dimensions, "lqip": asset->metadata.lqip`;
+
+const summaryProjection = `title, "slug": slug.current, excerpt, publishedAt, category,
+  "coverImage": select(defined(coverImage.asset) => coverImage{ ..., ${imageMeta} }, null)`;
+const bodyProjection = `body[]{ ..., _type == "image" => { ${imageMeta} } }`;
 const caseStudyProjection = `${summaryProjection}, client, role, technologies`;
 
 const postsQuery = defineQuery(
   `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) { ${summaryProjection} }`,
 );
 const postQuery = defineQuery(
-  `*[_type == "post" && slug.current == $slug][0] { ${summaryProjection}, body }`,
+  `*[_type == "post" && slug.current == $slug][0] { ${summaryProjection}, ${bodyProjection} }`,
 );
 const caseStudiesQuery = defineQuery(
   `*[_type == "caseStudy" && defined(slug.current)] | order(publishedAt desc) { ${caseStudyProjection} }`,
 );
 const caseStudyQuery = defineQuery(
-  `*[_type == "caseStudy" && slug.current == $slug][0] { ${caseStudyProjection}, body }`,
+  `*[_type == "caseStudy" && slug.current == $slug][0] { ${caseStudyProjection}, ${bodyProjection} }`,
 );
 
 async function fetchList<T>(query: string, schema: z.ZodType<T>): Promise<T[]> {
-  if (!sanityClient) return [];
   return z.array(schema).parse(await sanityClient.fetch(query));
 }
 
 async function fetchOne<T>(query: string, slug: string, schema: z.ZodType<T>): Promise<T | null> {
-  if (!sanityClient) return null;
   return schema.nullable().parse(await sanityClient.fetch(query, { slug }));
 }
 

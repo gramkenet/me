@@ -1,3 +1,4 @@
+import { BadgeList } from "@/components/ui";
 import type { SkillGroup } from "@/content/resume";
 
 export function SkillsGrid({ groups }: { groups: SkillGroup[] }) {
@@ -6,7 +7,9 @@ export function SkillsGrid({ groups }: { groups: SkillGroup[] }) {
       {groups.map((g) => (
         <div key={g.name}>
           <dt className="font-medium">{g.name}</dt>
-          <dd className="mt-2 text-muted">{g.skills.join(" · ")}</dd>
+          <dd className="mt-3">
+            <BadgeList items={g.skills} />
+          </dd>
         </div>
       ))}
     </dl>

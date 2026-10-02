@@ -1,8 +1,29 @@
 import type { SkillGroup } from "./schema";
 
-// TODO: replace with real skills.
+// Drawn from the LinkedIn summary and top skills.
 export const skills: SkillGroup[] = [
-  { name: "Architecture", skills: ["Composable / headless DXP", "Cloud architecture"] },
-  { name: "Platforms", skills: ["Sitecore", "Next.js"] },
-  { name: "Leadership", skills: ["Technical leadership", "Mentoring"] },
+  {
+    name: "Platforms & CMS",
+    skills: ["Sitecore", "SitecoreAI / XM Cloud", "Headless architecture", "Enterprise CMS"],
+  },
+  {
+    name: "Full-stack development",
+    skills: ["Next.js", "React", "TypeScript", ".NET Core / MVC", "C#", "SQL", "Webpack", "Front-end framework design"],
+  },
+  {
+    name: "Delivery & infrastructure",
+    skills: ["CI/CD pipelines", "Vercel", "Netlify", "Azure", "Cloudflare"],
+  },
+  {
+    name: "Quality",
+    skills: ["Unit testing", "Integration testing"],
+  },
+  {
+    name: "AI-enabled engineering",
+    skills: ["GitHub Copilot", "Claude Code", "Custom AI solutions"],
+  },
+  {
+    name: "Leadership",
+    skills: ["Engineering management", "Solutions architecture", "Client advisory", "Delivery practices"],
+  },
 ];

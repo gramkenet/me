@@ -1,13 +1,17 @@
-import Link from "next/link";
+import { PageHeader } from "@/components/page-header";
+import { SiteShell } from "@/components/site-shell";
+import { ButtonLink, Container } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <div>
-      <h1 className="text-3xl font-semibold tracking-tight">Not found</h1>
-      <p className="mt-4 text-muted">That page doesn&apos;t exist.</p>
-      <Link href="/" className="mt-6 inline-block underline underline-offset-4">
-        Back home
-      </Link>
-    </div>
+    <SiteShell>
+      <Container className="py-16">
+        <PageHeader title="Not found" intro="That page doesn’t exist.">
+          <ButtonLink href="/" variant="secondary">
+            Back home
+          </ButtonLink>
+        </PageHeader>
+      </Container>
+    </SiteShell>
   );
 }
