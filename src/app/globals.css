@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* Brand palette. Generates utilities like bg-primary-500, text-secondary-700,
+   border-neutral-200, bg-success-light. `neutral` replaces Tailwind's default. */
+@theme {
+  --color-primary-50: #f3f4f6;
+  --color-primary-100: #e7e9ed;
+  --color-primary-200: #caced8;
+  --color-primary-300: #a4abbb;
+  --color-primary-400: #747f98;
+  --color-primary-500: #0f224d;
+  --color-primary-600: #060f23;
+  --color-primary-700: #000000;
+  --color-primary-800: #000000;
+  --color-primary-900: #000000;
+  --color-primary-950: #000000;
+
+  --color-secondary-50: #f5fbff;
+  --color-secondary-100: #ebf6ff;
+  --color-secondary-200: #d3ecff;
+  --color-secondary-300: #b3deff;
+  --color-secondary-400: #8ccdff;
+  --color-secondary-500: #38a9ff;
+  --color-secondary-600: #0593ff;
+  --color-secondary-700: #006bbd;
+  --color-secondary-800: #004375;
+  --color-secondary-900: #001a2e;
+  --color-secondary-950: #000000;
+
+  --color-accent-50: #f2f2f2;
+  --color-accent-100: #e6e6e6;
+  --color-accent-200: #c7c7c7;
+  --color-accent-300: #9e9e9e;
+  --color-accent-400: #6b6b6b;
+  --color-accent-500: #000000;
+  --color-accent-600: #000000;
+  --color-accent-700: #000000;
+  --color-accent-800: #000000;
+  --color-accent-900: #000000;
+  --color-accent-950: #000000;
+
+  --color-neutral-50: #f2f3f4;
+  --color-neutral-100: #e5e6e8;
+  --color-neutral-200: #cccdd1;
+  --color-neutral-300: #b2b4ba;
+  --color-neutral-400: #989ba4;
+  --color-neutral-500: #7e838d;
+  --color-neutral-600: #676b74;
+  --color-neutral-700: #50535a;
+  --color-neutral-800: #393b40;
+  --color-neutral-900: #222427;
+  --color-neutral-950: #17181a;
+
+  --color-success: #11bb4f;
+  --color-success-light: #eef7f1;
+  --color-success-dark: #0a7532;
+  --color-error: #ea1515;
+  --color-error-light: #f7eeee;
+  --color-error-dark: #8d0c0c;
+  --color-warning: #ea9c15;
+  --color-warning-light: #f7f3ee;
+  --color-warning-dark: #8d5e0c;
+  --color-info: #157fea;
+  --color-info-light: #eef2f7;
+  --color-info-dark: #0c4c8d;
+}
+
+/* Semantic roles, mapped onto the palette. Components use these
+   (bg-background, text-muted, text-link…) so dark mode is handled here. */
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-primary-500);
+  --muted: var(--color-neutral-600);
+  --border: var(--color-neutral-200);
+  --link: var(--color-secondary-700);
+  --selection: var(--color-secondary-200);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--color-neutral-950);
+    --foreground: var(--color-neutral-50);
+    --muted: var(--color-neutral-400);
+    --border: var(--color-neutral-800);
+    --link: var(--color-secondary-400);
+    --selection: var(--color-secondary-800);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-link: var(--link);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 48rem;
+  padding-inline: 1.25rem;
+}
+
+@utility section-title {
+  margin-bottom: 1.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@utility chip {
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--selection);
+}
+
+/* Long-form content from Sanity. */
+.prose {
+  line-height: 1.75;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h2 {
+  margin-top: 2em;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.prose h3 {
+  margin-top: 1.75em;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.prose blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+/* Shiki dual-theme output (defaultColor: false). */
+.code-block pre {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+.code-block pre span {
+  color: var(--shiki-light);
+}
+@media (prefers-color-scheme: dark) {
+  .code-block pre {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+  .code-block pre span {
+    color: var(--shiki-dark);
+  }
+}
